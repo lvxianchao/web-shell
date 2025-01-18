@@ -6,7 +6,7 @@ import {
   SyncOutlined,
   UserOutlined
 } from "@ant-design/icons";
-import {Layout, Menu, type MenuProps, theme} from 'antd';
+import {Layout, Menu, type MenuProps, theme, Tooltip} from 'antd';
 import React from "react";
 import ServersTable from "../../components/ServersTable.tsx";
 
@@ -45,10 +45,16 @@ export default function Servers() {
   return (
     <Layout>
       <Sider width={200} style={{background: colorBgContainer}}>
-        <div className="font-bold w-[224px] text-center">
-          <SyncOutlined/>
-          <FolderAddOutlined/>
-          <DatabaseOutlined/>
+        <div className="font-bold w-[200px] text-center flex justify-center gap-6 p-4 border-b">
+          <Tooltip title="Refresh">
+            <SyncOutlined className="cursor-pointer"/>
+          </Tooltip>
+          <Tooltip title="Add Group">
+            <FolderAddOutlined className="cursor-pointer"/>
+          </Tooltip>
+          <Tooltip title="Add Server">
+            <DatabaseOutlined className="cursor-pointer"/>
+          </Tooltip>
         </div>
         <Menu
           mode="inline"
