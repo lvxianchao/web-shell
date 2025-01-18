@@ -7,8 +7,9 @@ import {
   UserOutlined
 } from "@ant-design/icons";
 import {Layout, Menu, type MenuProps, theme, Tooltip} from 'antd';
-import React from "react";
+import React, {useState} from "react";
 import ServersTable from "../../components/ServersTable.tsx";
+import CreateServerModal from "./create-server-modal.tsx";
 
 const {Content, Sider} = Layout;
 
@@ -39,9 +40,9 @@ const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOu
 );
 
 export default function Servers() {
-  const {
-    token: {colorBgContainer, borderRadiusLG},
-  } = theme.useToken();
+  const {token: {colorBgContainer, borderRadiusLG}} = theme.useToken();
+  const [isCreateServerModalOpen, setIsCreateServerModalOpen] = useState(false);
+  console.log(isCreateServerModalOpen)
   return (
     <Layout>
       <Sider width={200} style={{background: colorBgContainer}}>
@@ -53,7 +54,7 @@ export default function Servers() {
             <FolderAddOutlined className="cursor-pointer"/>
           </Tooltip>
           <Tooltip title="Add Server">
-            <DatabaseOutlined className="cursor-pointer"/>
+            <DatabaseOutlined className="cursor-pointer" onClick={() => setIsCreateServerModalOpen(true)}/>
           </Tooltip>
         </div>
         <Menu
@@ -76,6 +77,8 @@ export default function Servers() {
           <ServersTable/>
         </Content>
       </Layout>
+
+      <CreateServerModal isOpen={isCreateServerModalOpen} setIsCreateServerModalOpen={setIsCreateServerModalOpen}/>
     </Layout>
   )
 }
