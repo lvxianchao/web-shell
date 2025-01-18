@@ -1,60 +1,31 @@
-import {
-  DatabaseOutlined,
-  FolderAddOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-  SyncOutlined,
-  UserOutlined
-} from '@ant-design/icons';
+import {CodeOutlined, DatabaseOutlined} from "@ant-design/icons";
 import type {MenuProps} from 'antd';
-import {Layout, Menu, theme} from 'antd';
-import React from 'react';
-import ServersTable from "./components/ServersTable.tsx";
+import {Layout, Menu} from 'antd';
+import React, {useState} from 'react';
+import {Outlet, useNavigate} from "react-router";
 
-const {Header, Content, Sider} = Layout;
+const {Header} = Layout;
 
 const items1: MenuProps['items'] = [
   {
-    key: 'servers',
+    key: '/',
     label: 'Servers',
+    icon: <DatabaseOutlined/>
   },
   {
-    key: 'connections',
-    label: 'Connections',
+    key: 'terminals',
+    label: 'Terminals',
+    icon: <CodeOutlined/>
   }
 ];
 
-const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-  (icon, index) => {
-    const key = String(index + 1);
-
-    return {
-      key: `sub${key}`,
-      icon: React.createElement(icon),
-      label: `subnav ${key}`,
-
-      children: new Array(4).fill(null).map((_, j) => {
-        const subKey = index * 4 + j + 1;
-        return {
-          key: subKey,
-          label: `option${subKey}`,
-          children: [
-            {
-              key: "fuck",
-              label: 'fuck label'
-            }
-          ]
-        };
-      }),
-    };
-  },
-);
-
 const App: React.FC = () => {
-  const {
-    token: {colorBgContainer, borderRadiusLG},
-  } = theme.useToken();
-
+  const navigate = useNavigate();
+  const [selectedKeys, setSelectedKeys] = useState<string[]>(['/']);
+  const handleMenuOnClick = ({key}: { key: string }) => {
+    setSelectedKeys([key]);
+    navigate(key)
+  }
   return (
     <Layout className="h-[100vh]">
       <Header className="flex justify-center pl-0">
@@ -66,37 +37,12 @@ const App: React.FC = () => {
           mode="horizontal"
           defaultSelectedKeys={['2']}
           items={items1}
-          style={{flex: 1, minWidth: 0}}
+          className="flex-1 min-w-0"
+          onClick={handleMenuOnClick}
+          selectedKeys={selectedKeys}
         />
       </Header>
-      <Layout>
-        <Sider width={200} style={{background: colorBgContainer}}>
-          <div className="font-bold w-[224px] text-center">
-            <SyncOutlined/>
-            <FolderAddOutlined/>
-            <DatabaseOutlined/>
-          </div>
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            style={{height: '100%', borderRight: 0}}
-            items={items2}
-          />
-        </Sider>
-        <Layout style={{padding: '0 24px 24px'}}>
-          <Content
-            style={{
-              margin: 0,
-              minHeight: 280,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            <ServersTable/>
-          </Content>
-        </Layout>
-      </Layout>
+      <Outlet/>
     </Layout>
   );
 };
